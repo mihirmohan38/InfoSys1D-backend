@@ -26,12 +26,12 @@ def create_app(test_config = None) :
 
     @app.route("/hello")
     def hello(): 
-        inst = get_db().execute(
-            "SELECT password FROM users WHERE username = 'mihir'"
-            #"SELECT * FROM users"
+        #inst = get_db().execute(
+        #    "SELECT password FROM users WHERE username = 'mihir'"
+        #    #"SELECT * FROM users"
             
-        ).fetchall()
-        click.echo(inst)
+        #).fetchall()
+        #click.echo(inst)
         return "hello"
 
     from . import db, startPage, myPage
