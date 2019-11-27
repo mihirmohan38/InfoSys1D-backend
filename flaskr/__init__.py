@@ -34,11 +34,13 @@ def create_app(test_config = None) :
         #click.echo(inst)
         return "hello"
 
-    from . import db, startPage, myPage
+    from . import db, startPage, myPage, auth, blog
     
     db.connectApp2db(app)
     app.register_blueprint(startPage.bp)
     app.register_blueprint(myPage.bp)
+    app.register_blueprint(blog.bp)
+    app.register_blueprint(auth.bp)
     #app.register_blueprint(home.bp)
     #app.add_url_rule("/", endpoint="index")
     return app 
