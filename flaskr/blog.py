@@ -17,12 +17,11 @@ def index():
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-    return render_template('blog/index.html', posts=posts)
+    return jsonify({})
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
-
     jsonified_req = request.get_json()
     title = jsonified_req['title']
     date_created = jsonified_req['date_created']
@@ -68,7 +67,7 @@ def get_post(id, check_author=True):
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
-
+    post = get_post(id)
     jsonified_req = request.get_json()
     title = jsonified_req['title']
     date_created = jsonified_req['date_created']
