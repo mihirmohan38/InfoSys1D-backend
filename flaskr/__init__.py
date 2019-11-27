@@ -22,8 +22,6 @@ def create_app(test_config = None) :
     except OSError : 
         pass
 
-
-
     @app.route("/hello")
     def hello(): 
         #inst = get_db().execute(
@@ -44,3 +42,6 @@ def create_app(test_config = None) :
     #app.register_blueprint(home.bp)
     #app.add_url_rule("/", endpoint="index")
     return app 
+if __name__ == '__init__':
+    app = create_app()
+    app.run()    

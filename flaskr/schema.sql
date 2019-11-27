@@ -12,9 +12,17 @@ CREATE TABLE users (
 CREATE TABLE activities (
     unq_id INTEGER PRIMARY KEY ,
     category TEXT , 
-    date_created DATE NOT NULL, 
+    date_created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP, 
     date_activity DATE NOT NULL,
-    creator INTEGER NOT NULL
+    creator TEXT,
+    venue TEXT, 
+    ppl INT, 
+    image_uri IMAGE, 
+    descrip TEXT, 
+    max_ppl INT, 
+
+
+
 
 );
 
@@ -26,7 +34,7 @@ CREATE TABLE registered (
 
 
 INSERT INTO users VALUES ("mihir", "skydiving"); 
-INSERT INTO activities VALUES (1, 'adventure', DATE(), DATE() , 2) ; 
+INSERT INTO activities VALUES (1, 'adventure', DATE(), DATE() , "mihir","nyx",3,NULL,"fun",4) ; 
 INSERT INTO registered VALUES ("mihir", 1) ; 
 INSERT INTO registered VALUES ("mihir", 2);
 INSERT INTO registered values ("josh", 2); 

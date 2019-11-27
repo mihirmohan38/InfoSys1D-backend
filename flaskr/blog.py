@@ -1,10 +1,11 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify
 )
 from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
-from flaskr.db import get_db
+from flaskr.db import get_db, row2json_activities, row2json_users, row2json_registered
+
 
 bp = Blueprint('blog', __name__)
 
@@ -21,38 +22,30 @@ def index():
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
-    if request.method == 'POST':
-        jsonified_req = request.get_json()
-        title = jsonified_req['title']
-        date_created = jsonified_req['date_created']
-        date_activity = jsonified_req['date_activity']
-        people = jsonified_req['people']
-        max_people = jsonified_req['max_people']
-        imageURI = jsonified_req['imageURI']
-        location = jsonified_req['location']
-        category = jsonified_req['category']
-        details = jsonified_req['details']
-        error = None
 
-        if not title:
-            error = 'Title is required.'
-        if not location:
-            error = 'Location is required'
-        if not category:
-            error = 'Category is required'
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'INSERT INTO post (title,date_created,date_activity,people,max_people,imageURI,location,category, details, creator)'
-                ' VALUES (?,?,? ?, ?,?,?,?,?,?)',
-                (title,date_created,date_activity,people,max_people,imageURI,location,category, details, g.user['id'])
-            )
-            db.commit()
-            return redirect(url_for('blog.index'))
+    jsonified_req = request.get_json()
+    title = jsonified_req['title']
+    date_created = jsonified_req['date_created']
+    date_activity = jsonified_req['date_activity']
+    people = jsonified_req['people']
+    max_people = jsonified_req['max_people']
+    imageURI = jsonified_req['imageURI']
+    location = jsonified_req['location']
+    category = jsonified_req['category']
+    details = jsonified_req['details']
 
-    return render_template('blog/create.html')
+
+
+    db = get_db()
+    db.execute(
+        'INSERT INTO post (title,date_created,date_activity,people,max_people,imageURI,location,category, details, creator)'
+        ' VALUES (?,?,? ?, ?,?,?,?,?,?)',
+        (title,date_created,date_activity,people,max_people,imageURI,location,category, details, g.user['id'])
+    )
+    db.commit()
+    return jsonify({})
+
+
 
 def get_post(id, check_author=True):
     post = get_db().execute(
@@ -68,42 +61,33 @@ def get_post(id, check_author=True):
     if check_author and post['author_id'] != g.user['id']:
         abort(403)
 
-    return post
+    return row2json_activities(post) 
+
+    
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
-    post = get_post(id)
 
-    if request.method == 'POST':
-        jsonified_req = request.get_json()
-        title = jsonified_req['title']
-        date_created = jsonified_req['date_created']
-        date_activity = jsonified_req['date_activity']
-        people = jsonified_req['people']
-        max_people = jsonified_req['max_people']
-        imageURI = jsonified_req['imageURI']
-        location = jsonified_req['location']
-        category = jsonified_req['category']
-        details = jsonified_req['details']
-        error = None
+    jsonified_req = request.get_json()
+    title = jsonified_req['title']
+    date_created = jsonified_req['date_created']
+    date_activity = jsonified_req['date_activity']
+    people = jsonified_req['people']
+    max_people = jsonified_req['max_people']
+    imageURI = jsonified_req['imageURI']
+    location = jsonified_req['location']
+    category = jsonified_req['category']
+    details = jsonified_req['details']
 
-        if not title:
-            error = 'Title is required.'
-
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'UPDATE post SET title = ?, date_created=?,date_activity=?,people=?,max_people=?,imageURI=?,location = ?, category = ?, details = ?'
-                ' WHERE id = ?',
-                (title,date_created,date_activity,people,max_people,imageURI, location, category, details, id)
-            )
-            db.commit()
-            return redirect(url_for('blog.index'))
-
-    return render_template('blog/update.html', post=post)
+    db = get_db()
+    db.execute(
+        'UPDATE post SET title = ?, date_created=?,date_activity=?,people=?,max_people=?,imageURI=?,location = ?, category = ?, details = ?'
+        ' WHERE id = ?',
+        (title,date_created,date_activity,people,max_people,imageURI, location, category, details, id)
+    )
+    db.commit()
+    return jsonify({})
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
@@ -112,4 +96,4 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
-    return redirect(url_for('blog.index'))
+    return jsonify({})

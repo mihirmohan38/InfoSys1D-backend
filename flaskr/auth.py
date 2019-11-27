@@ -1,7 +1,7 @@
 import functools
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -40,33 +40,24 @@ def register():
 
         flash(error)    # Flashes error, if error exists
 
-    return render_template('auth/register.html')    # Rendering of html template for the user, CHANGE TO ROUTE TO ANDROID APP
+        # Rendering of html template for the user, CHANGE TO ROUTE TO ANDROID APP
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    if request.method == 'POST':
-        jsonified_req = request.get_json()
-        username = jsonified_req['username']
-        password = jsonified_req['password']
-        db = get_db()
-        error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+    json = {"status" : 0}
+    jsonified_req = request.get_json()
+    username = jsonified_req['username']
+    password = jsonified_req['password']
+    db = get_db()
 
-        if user is None:
-            error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
+    user = db.execute(
+        'SELECT * FROM user WHERE username = ?', (username,)
+    ).fetchone()
+    if user.password == password : 
+        json["status"] = 1 
+    return jsonify(json)
 
-        if error is None:
-            session.clear()                 # Clear current session, now that validation has completed
-            session['user_id'] = user['id'] # Store user id in new session
-            return redirect(url_for('index'))
-
-        flash(error)
-
-    return render_template('auth/login.html') # Change to route to android app
+ # Change to route to android app
 
 @bp.before_app_request # Registers below function that runs before view is called
 def load_logged_in_user():
@@ -82,7 +73,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()     # Removes all stored user information from session dictionary
-    return redirect(url_for('index'))
+    # Redirected back to login page
 
 def login_required(view):
     @functools.wraps(view)

@@ -1,8 +1,8 @@
 import sqlite3 
 import click 
-from flask import current_app, g 
+from flask import current_app, g , jsonify
 from flask.cli import with_appcontext
-import simplejson
+
 #from sqlobject import * 
 
 def get_db() : 
@@ -56,7 +56,7 @@ def row2json_users(table) :
         i += 1 
 
  
-    return simplejson.dumps(users)
+    return jsonify(users)
 
 def row2json_activities(table) : 
     activities = []
@@ -67,11 +67,16 @@ def row2json_activities(table) :
             "category" : row[1],
             "date_created" : str(row[2]),
             "date_activity" : str(row[3]), 
-            "creator" : row[4]
+            "creator" : row[4],
+            "venue" : row[5] , 
+            "ppl" : row[6], 
+            "image_uri" : row[7],
+            "description" : row[8], 
+            "max_ppl" : row[9]
         }
 
         activities.append(act_dict)
-    return simplejson.dumps(activities)
+    return jsonify(activities)
 
 def row2json_registered(table) : 
     reg = []
@@ -93,4 +98,4 @@ def row2json_registered(table) :
         
 
 
-    return simplejson.dumps(json_dict)
+    return jsonify(json_dict)
