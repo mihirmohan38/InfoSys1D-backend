@@ -15,9 +15,9 @@ bp = Blueprint('auth', __name__, url_prefix='/auth') # Creates Blueprint(flask.B
 @bp.route('/register', methods=('GET', 'POST')) # '/auth/register' is associated with register() view function, which is called.
 def register():
     if request.method == 'POST':
-        jsonified_req = request.get_json()
-        username = jsonified_req['username']
-        password = jsonified_req['password']
+        jsonified_req = request.get_json(force=True)
+        username = jsonified_req["username"]
+        password = jsonified_req["password"]
         db = get_db() # Our db connection
         error = None
 
@@ -26,19 +26,21 @@ def register():
         elif not password:                      # Validate password not empty
             error = 'Password is required.'
         elif db.execute(
-            'SELECT id FROM user WHERE username = ?', (username,) # Alike string formatting, ? is replaced with username
+            'SELECT username FROM users WHERE username = ?', (username,) # Alike string formatting, ? is replaced with username
         ).fetchone() is not None:                                  # fetchone() returns one row from the query
-            error = 'User {} is already registered.'.format(username)
+            error = 'User {} is already registered.'.format(username,)
 
         if error is None:
             db.execute( # Database connection executes SQLite command, injecting inputusername and password into user table in schema.sql
-                'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
+                'INSERT INTO users (username, password) VALUES (?, ?)',
+                (username, password)
             )
             db.commit()                                 # To commit and save the changes
-            return redirect(url_for('auth.login'))      # Redirects to login page
+            return('it works, please redirect to login page')
+            #return redirect(url_for('auth.login'))      # Redirects to login page
 
         flash(error)    # Flashes error, if error exists
+        return(error)
 
         # Rendering of html template for the user, CHANGE TO ROUTE TO ANDROID APP
 
@@ -47,13 +49,14 @@ def login():
     json = {"status" : 0}
     jsonified_req = request.get_json()
     username = jsonified_req['username']
+    session['username'] = username
     password = jsonified_req['password']
     db = get_db()
 
     user = db.execute(
-        'SELECT * FROM user WHERE username = ?', (username,)
+        'SELECT * FROM users WHERE username = ?', (username,)
     ).fetchone()
-    if user.password == password : 
+    if user['password'] == password : 
         json["status"] = 1 
     return jsonify(json)
 
@@ -61,13 +64,13 @@ def login():
 
 @bp.before_app_request # Registers below function that runs before view is called
 def load_logged_in_user():
-    user_id = session.get('user_id')
+    user_id = session.get('username')
     session.permanent = True # User remains logged in 
     if user_id is None:
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+            'SELECT * FROM users WHERE username = ?', (user_id,)
         ).fetchone()
 
 @bp.route('/logout')

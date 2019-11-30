@@ -13,9 +13,9 @@ bp = Blueprint('blog', __name__)
 def index():
     db = get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
+        'SELECT unq_id, title, category,date_created, date_activity,creator,venue,ppl,image_uri,descrip,max_ppl'
+        ' FROM activities p JOIN users u ON p.creator = u.username'
+        ' ORDER BY date_created DESC'
     ).fetchall()
     return jsonify({})
 
@@ -24,7 +24,6 @@ def index():
 def create():
     jsonified_req = request.get_json()
     title = jsonified_req['title']
-    date_created = jsonified_req['date_created']
     date_activity = jsonified_req['date_activity']
     people = jsonified_req['people']
     max_people = jsonified_req['max_people']
@@ -34,12 +33,10 @@ def create():
     details = jsonified_req['details']
 
 
-
     db = get_db()
     db.execute(
-        'INSERT INTO post (title,date_created,date_activity,people,max_people,imageURI,location,category, details, creator)'
-        ' VALUES (?,?,? ?, ?,?,?,?,?,?)',
-        (title,date_created,date_activity,people,max_people,imageURI,location,category, details, g.user['id'])
+        'INSERT INTO activities (title, date_created, date_activity, ppl, max_ppl, image_uri, venue, category, descrip, creator) VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?)',
+        (title, date_activity, people, max_people, imageURI, location, category, details, g.user['username'])
     )
     db.commit()
     return jsonify({})
@@ -48,16 +45,16 @@ def create():
 
 def get_post(id, check_author=True):
     post = get_db().execute(
-        'SELECT p.id, title, location, category, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
-        (id,)
+        'SELECT unq_id, title,date_created,date_activity,ppl,max_ppl,image_uri,venue,category, descrip, creator'
+        ' FROM post p JOIN user u ON p.creator = u.username'
+        ' WHERE p.unq_id = ?',
+        (id)
     ).fetchone()
 
     if post is None:
-        abort(404, "Post id {0} doesn't exist.".format(id))
+        abort(404, "Post id {0} doesn't exist.".format(id,))
 
-    if check_author and post['author_id'] != g.user['id']:
+    if check_author and post['creator'] != g.user['id']:
         abort(403)
 
     return row2json_activities(post) 
@@ -70,7 +67,6 @@ def update(id):
     post = get_post(id)
     jsonified_req = request.get_json()
     title = jsonified_req['title']
-    date_created = jsonified_req['date_created']
     date_activity = jsonified_req['date_activity']
     people = jsonified_req['people']
     max_people = jsonified_req['max_people']
@@ -81,9 +77,9 @@ def update(id):
 
     db = get_db()
     db.execute(
-        'UPDATE post SET title = ?, date_created=?,date_activity=?,people=?,max_people=?,imageURI=?,location = ?, category = ?, details = ?'
-        ' WHERE id = ?',
-        (title,date_created,date_activity,people,max_people,imageURI, location, category, details, id)
+        'UPDATE post SET title = ?,date_activity=?,ppl=?,max_ppl=?,image_uri=?,venue = ?, category = ?, descrip = ?'
+        ' WHERE unq_id = ?',
+        (title,date_activity,people,max_people,imageURI, location, category, details, id)
     )
     db.commit()
     return jsonify({})
@@ -93,6 +89,6 @@ def update(id):
 def delete(id):
     get_post(id)
     db = get_db()
-    db.execute('DELETE FROM post WHERE id = ?', (id,))
+    db.execute('DELETE FROM post WHERE unq_id = ?', (id,))
     db.commit()
     return jsonify({})

@@ -46,10 +46,45 @@ Username	Unq_id
 # How to use and endpoints
 
 ## Authentication 
--- to be done by josh
-
+/auth/login 
+To login. methods=('GET','POS')
+		input:
+		{"username":someString,
+		"password":someString}
+/auth/register 
+To register. methods = ('GET','POST')
+		input:
+		{"username":someString,
+		"password":someString}
 ## creating and updating events 
--- to be done by josh
+/create
+methods=('GET','POS')
+input: 
+{
+"title":someString,
+"date_activity":someDate,
+"people":someInt,
+"max_people":someInt,
+"imageURI":someImageURL,
+"location":someString,
+"category":someString,
+"details":someString
+}
+/update 
+methods=('GET','POS')
+{
+"title":someString,
+"date_activity":someDate,
+"people":someInt,
+"max_people":someInt,
+"imageURI":someImageURL,
+"location":someString,
+"category":someString,
+"details":someString
+}
+/<int:id>/delete
+methods = ('POST')
+
 
 ## My Page
 

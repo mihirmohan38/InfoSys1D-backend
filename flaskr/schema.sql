@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS users; 
-DROP TABLE IF EXISTS activities ; 
+DROP TABLE IF EXISTS activities; 
 DROP TABLE IF EXISTS registered; 
 
 CREATE TABLE users (
@@ -11,19 +11,16 @@ CREATE TABLE users (
 
 CREATE TABLE activities (
     unq_id INTEGER PRIMARY KEY ,
+    title TEXT NOT NULL,
     category TEXT , 
     date_created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    date_activity DATE NOT NULL,
+    date_activity TEXT,
     creator TEXT,
     venue TEXT, 
     ppl INT, 
     image_uri IMAGE, 
     descrip TEXT, 
-    max_ppl INT, 
-
-
-
-
+    max_ppl INT
 );
 
 CREATE TABLE registered (
