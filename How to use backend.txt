@@ -34,7 +34,8 @@ Serving on http://0.0.0.0:8080
 # Database format
 The database contains 3 tables viz. users, activities and registrations. 
 ## Users 
-Username	Password
+Username Password
+
 ## Activities 
 Unq_id	Category 	date_created	date_activity	Creator 	Venue 	ppl	Image_uri	descrip	Max_ppl
 ## Registered
@@ -51,10 +52,36 @@ Username	Unq_id
 -- to be done by josh
 
 ## My Page
-/myPage/username    all the activities the user has regiestered for 
+
+all the requests for my page are get methods and have no request body 
+
+/myPage/username    all the activities the user has regiestered for  
+			returns a json : { username : [list of uinq id's registered for the user}
+
 /myPage/id          gets the activity with id = id  
+			return a json  : { "unq_id" : row[0], 
+            				   "category" : row[1],
+            				   "date_created" : str(row[2]),
+           				   "date_activity" : str(row[3]), 
+         				   "creator" : row[4],
+        				   "venue" : row[5] , 
+            				   "ppl" : row[6], 
+        				   "image_uri" : row[7],
+           				   "description" : row[8], 
+            				   "max_ppl" : row[9]}        // rows are just values
 
 ## Home Page 
+
+
+all the requests for my page are get methods and have no request body 
+
+
 /home/                             all users -- just  a test end point, maynot be useful
+
 /home/actListTime                  all the activities sorted in the order of time created
+					return the a json array : [ {act 1}, {act 2}, ...]
+						the activities are json of the format similar to /myPage/id
+
 /home/actListCategories/category/  all the activities in a pariticular category in the order of time
+					return the a json array : [ {act 1}, {act 2}, ...]
+						the activities are json of the format similar to /myPage/id
