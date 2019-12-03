@@ -18,6 +18,8 @@ def register():
         jsonified_req = request.get_json(force=True)
         username = jsonified_req["username"]
         password = jsonified_req["password"]
+        telegram = jsonified_req["telegram"]
+        preference = jsonified_req["preference"]
         db = get_db() # Our db connection
         error = None
 
@@ -32,8 +34,8 @@ def register():
 
         if error is None:
             db.execute( # Database connection executes SQLite command, injecting inputusername and password into user table in schema.sql
-                'INSERT INTO users (username, password) VALUES (?, ?)',
-                (username, password)
+                'INSERT INTO users (username, password, telegram , preference) VALUES (?, ?)',
+                (username, password,telegram, preference)
             )
             db.commit()                                 # To commit and save the changes
             return('it works, please redirect to login page')

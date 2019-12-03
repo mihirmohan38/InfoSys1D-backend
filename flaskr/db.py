@@ -48,7 +48,9 @@ def row2json_users(table) :
     for row in table : 
         user_dict = {
             "username" : row[0],
-            "password" : row[1]
+            "password" : row[1], 
+            "telegram" : row[2],
+            "preference" : row[3]
         }
         users.append(user_dict)
     for user in users : 
@@ -62,20 +64,27 @@ def row2json_activities(table) :
     activities = []
     for row in table : 
 
+
         act_dict = {
             "unq_id" : row[0], 
-            "category" : row[1],
-            "date_created" : str(row[2]),
-            "date_activity" : str(row[3]), 
-            "creator" : row[4],
-            "venue" : row[5] , 
-            "ppl" : row[6], 
-            "image_uri" : row[7],
-            "description" : row[8], 
-            "max_ppl" : row[9]
+            "title" : row[1],
+            "category" : row[2],
+            "date_created" : str(row[3]),
+            "date_activity" : str(row[4]), 
+            "creator" : row[5],
+            "venue" : row[6] , 
+            "ppl" : row[7], 
+            "image_uri" : row[8],
+            "description" : row[9], 
+            "max_ppl" : row[10],
+            "telegram_group" : row[11]
         }
 
         activities.append(act_dict)
+    
+    if len(activities) == 1 : 
+        return jsonify(act_dict)
+        
     return jsonify(activities)
 
 def row2json_registered(table) : 

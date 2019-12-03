@@ -22,12 +22,12 @@ def myact(user) :
     json = row2json_registered(activities)
     return json
 
-@bp.route("/<int:act_id>")
-def getAct(act_id) : 
+@bp.route("/getAct/<int:unq_id>") #unsupported data type error 
+def getAct(unq_id) : 
     db = get_db() 
     activity = db.execute(
-        "SELECT * FROM activities WHERE unq_id = ?", (act_id)
-    ).fetchone() 
+        "SELECT * FROM activities WHERE unq_id = ?", (unq_id,)#int(unq_id))
+    ).fetchall() 
 
     json = row2json_activities(activity)
     return json

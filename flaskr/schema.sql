@@ -5,7 +5,9 @@ DROP TABLE IF EXISTS registered;
 CREATE TABLE users (
 
     username TEXT  , 
-    password TEXT NOT NULL 
+    password TEXT NOT NULL , 
+    telegram TEXT, 
+    preference TEXT
 
 );
 
@@ -20,7 +22,8 @@ CREATE TABLE activities (
     ppl INT, 
     image_uri IMAGE, 
     descrip TEXT, 
-    max_ppl INT
+    max_ppl INT, 
+    telegram_group TEXT
 );
 
 CREATE TABLE registered (
@@ -30,8 +33,8 @@ CREATE TABLE registered (
 
 
 
-INSERT INTO users VALUES ("mihir", "skydiving"); 
-INSERT INTO activities VALUES (1, 'adventure', DATE(), DATE() , "mihir","nyx",3,NULL,"fun",4) ; 
+INSERT INTO users VALUES ("mihir", "skydiving", "mihir00", "sports"); 
+INSERT INTO activities VALUES (1,"sucba diving", 'adventure', DATE(), "sunday" , "mihir","nyx",3,NULL,"fun",4,"television group") ; 
 INSERT INTO registered VALUES ("mihir", 1) ; 
 INSERT INTO registered VALUES ("mihir", 2);
 INSERT INTO registered values ("josh", 2); 
