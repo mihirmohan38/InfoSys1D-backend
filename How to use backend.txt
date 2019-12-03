@@ -55,7 +55,9 @@ To login. methods=('GET','POS')
 To register. methods = ('GET','POST')
 		input:
 		{"username":someString,
-		"password":someString}
+		"password":someString , 
+		"telegram" : tele,
+		"preference" : pref}
 ## creating and updating events 
 /create
 methods=('GET','POS')
@@ -63,24 +65,30 @@ input:
 {
 "title":someString,
 "date_activity":someDate,
-"people":someInt,
-"max_people":someInt,
-"imageURI":someImageURL,
-"location":someString,
+"ppl":someInt,
+"max_ppl":someInt,
+"image_uri":someImageURL,
 "category":someString,
-"details":someString
+"telegram_group" : someString, 
+"descrip" : str , 
+"unq_id" : id, 
+"venue" : id, 
+
 }
+
 /update 
 methods=('GET','POS')
 {
 "title":someString,
 "date_activity":someDate,
-"people":someInt,
-"max_people":someInt,
-"imageURI":someImageURL,
-"location":someString,
+"ppl":someInt,
+"max_ppl":someInt,
+"image_uri":someImageURL,
 "category":someString,
-"details":someString
+"telegram_group" : someString, 
+"descrip" : str , 
+"unq_id" : id, 
+"venue" : id, 
 }
 /<int:id>/delete
 methods = ('POST')

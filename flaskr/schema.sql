@@ -16,7 +16,7 @@ CREATE TABLE activities (
     title TEXT NOT NULL,
     category TEXT , 
     date_created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    date_activity TEXT,
+    date_activity INT,
     creator TEXT,
     venue TEXT, 
     ppl INT, 
@@ -34,7 +34,8 @@ CREATE TABLE registered (
 
 
 INSERT INTO users VALUES ("mihir", "skydiving", "mihir00", "sports"); 
-INSERT INTO activities VALUES (1,"sucba diving", 'adventure', DATE(), "sunday" , "mihir","nyx",3,NULL,"fun",4,"television group") ; 
+INSERT INTO activities VALUES (1,"sucba diving", 'adventure', DATE(), 201912031600 , "mihir","nyx",3,NULL,"fun",4,"television group") ; 
+INSERT INTO activities VALUES (2, "NLP in rock and roll", "education", DATE(), 201912051500, "Rahul",'ISH',300,NULL, "motivational", 500, "geek") ; 
 INSERT INTO registered VALUES ("mihir", 1) ; 
 INSERT INTO registered VALUES ("mihir", 2);
 INSERT INTO registered values ("josh", 2); 

@@ -18,8 +18,8 @@ def index() :
     json = row2json_users(users)
     return json
 
-@bp.route('/actListTime')
-def act_list_time() : 
+@bp.route('/actListTimeCreated')
+def act_list_time_created() : 
     db = get_db()
     posts = db.execute(
         "SELECT * from activities ORDER BY date_created DESC LIMIT 5"
@@ -27,6 +27,14 @@ def act_list_time() :
     json = row2json_activities(posts)
     return json 
 
+@bp.route('/actListTimeActivity')
+def act_list_time_activity() : 
+    db = get_db()
+    posts = db.execute(
+        "SELECT * from activities ORDER BY date_activity ASC LIMIT 5"
+    ).fetchall()
+    json = row2json_activities(posts)
+    return json 
 
 @bp.route('/actListCategories/<category>/')
 def act_list_categories(category) : 
@@ -38,3 +46,4 @@ def act_list_categories(category) :
     json = row2json_activities(posts)
     return json
     
+#@bp.route("/actDescList/past/<")
