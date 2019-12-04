@@ -39,4 +39,4 @@ INSERT INTO activities VALUES (2, "NLP in rock and roll", "education", DATE(), 2
 INSERT INTO registered VALUES ("mihir", 1) ; 
 INSERT INTO registered VALUES ("mihir", 2);
 INSERT INTO registered values ("josh", 2); 
---SELECT TOP 5 * FROM activites WHERE creator = NULL ; 
+--SELECT TOP 5 * FROM activites WHERE creator = NULL ;

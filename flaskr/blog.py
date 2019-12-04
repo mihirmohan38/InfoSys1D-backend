@@ -32,12 +32,14 @@ def create():
     category = jsonified_req['category']
     details = jsonified_req['description']
     telegram_group = jsonified_req["telegram_group"]
+    username = jsonified_req["creator"]
 
 
     db = get_db()
     db.execute(
-        'INSERT INTO activities (title, date_created, date_activity, ppl, max_ppl, image_uri, venue, category, descrip, creator,telegram_group) VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?,?)',
-        (title, date_activity, people, max_people, imageURI, location, category, details, "username",telegram_group)
+        'INSERT INTO activities (title, date_created, date_activity, ppl, max_ppl, image_uri, venue, category, descrip, creator,telegram_group) VALUES (?, DATE(), ?, ?, ?, ?, ?, ?, ?, ?,?)',
+        (title, date_activity, people, max_people, imageURI, location, category, details, username,telegram_group)
+        #("3","3","3","3","3","3","3","3","3","3" )
     )
     db.commit()
     return jsonify({})
