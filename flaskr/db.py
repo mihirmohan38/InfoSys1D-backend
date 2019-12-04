@@ -108,3 +108,15 @@ def row2json_registered(table) :
 
 
     return jsonify(json_dict)
+
+def rowList2json_activities(lis) : 
+    act = [] 
+    for table in lis : 
+        for row in table : 
+            act_dict = {
+                "unq_id" : row[0],
+                "description" : row[9]
+            }
+            act.append(act_dict)
+    
+    return jsonify(act)

@@ -59,7 +59,7 @@ To register. methods = ('GET','POST')
 		"telegram" : tele,
 		"preference" : pref}
 ## creating and updating events 
-/create
+/blog/create
 methods=('GET','POS')
 input: 
 {
@@ -76,7 +76,7 @@ input:
 
 }
 
-/update 
+blog/update 
 methods=('GET','POS')
 {
 "title":someString,
@@ -90,7 +90,7 @@ methods=('GET','POS')
 "unq_id" : id, 
 "venue" : id, 
 }
-/<int:id>/delete
+blog/<int:id>/delete
 methods = ('POST')
 
 
@@ -128,3 +128,9 @@ all the requests for my page are get methods and have no request body
 /home/actListCategories/category/  all the activities in a pariticular category in the order of time
 					return the a json array : [ {act 1}, {act 2}, ...]
 						the activities are json of the format similar to /myPage/id
+
+/home//actDescList/past/<username>/  all the activities' unq_id and description before today for user with username
+					returns the json array : [{description: string, unq_id : id }, {...}]
+
+/home//actDescList/future/<username>/  all the activities' unq_id and description after today  for user with username
+					returns the json array : [{description: string, unq_id : id }, {...}]

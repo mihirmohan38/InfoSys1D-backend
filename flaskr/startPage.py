@@ -3,9 +3,29 @@ from flask import (
 )
 from werkzeug.exceptions import abort  
 #from flaskr.auth import login_required
+from datetime import datetime
 
-from flaskr.db import get_db, row2json_users, row2json_activities, row2json_registered
+from flaskr.db import get_db, row2json_users, row2json_activities, row2json_registered, rowList2json_activities
 import click
+
+def current_date() : 
+    ans = ""
+    count = 0 
+    for i in (str(datetime.now())) : 
+        if count < 12 : 
+            if i not in ['-'," ",":"] : 
+                ans += i 
+                count += 1
+        else : 
+            break
+    return int(ans)
+
+def strip_tuple(lis) : 
+    answer = "" 
+    for i in lis : 
+        answer = answer + str(i) + ", "
+    print(answer)
+    return answer.strip(",")
 
 bp = Blueprint('startPage', __name__,url_prefix='/home')
 
@@ -46,4 +66,47 @@ def act_list_categories(category) :
     json = row2json_activities(posts)
     return json
     
-#@bp.route("/actDescList/past/<")
+@bp.route("/actDescList/past/<username>")
+def NLP_past(username) : 
+    now = current_date() 
+    final = []
+    activity_ids = []
+    db = get_db()
+    posts = db.execute(
+        "SELECT * FROM registered WHERE username = ?" ,(username,)
+    ).fetchall()
+
+    for row in posts : 
+        activity_ids.append(row[1])
+
+    for id in activity_ids : 
+        answer = db.execute(
+            "SELECT * FROM activities WHERE date_activity < ? AND unq_id = ? ",(now,id,)
+        ).fetchall()
+
+        final.append(answer)
+    json = rowList2json_activities(final)
+    return json
+
+
+@bp.route("/actDescList/future/<username>")
+def NLP_future(username) : 
+    now = current_date() 
+    final = []
+    activity_ids = []
+    db = get_db()
+    posts = db.execute(
+        "SELECT * FROM registered WHERE username = ?" ,(username,)
+    ).fetchall()
+
+    for row in posts : 
+        activity_ids.append(row[1])
+
+    for id in activity_ids : 
+        answer = db.execute(
+            "SELECT * FROM activities WHERE date_activity > ? AND unq_id = ? ",(now,id,)
+        ).fetchall()
+
+        final.append(answer)
+    json = rowList2json_activities(final)
+    return json
