@@ -17,7 +17,7 @@ def index():
         ' FROM activities p JOIN users u ON p.creator = u.username'
         ' ORDER BY date_created DESC'
     ).fetchall()
-    return jsonify({})
+    return jsonify({"hello": "hi"})
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -25,19 +25,19 @@ def create():
     jsonified_req = request.get_json()
     title = jsonified_req['title']
     date_activity = jsonified_req['date_activity']
-    people = jsonified_req['people']
-    max_people = jsonified_req['max_people']
-    imageURI = jsonified_req['imageURI']
-    location = jsonified_req['location']
+    people = jsonified_req['ppl']
+    max_people = jsonified_req['max_ppl']
+    imageURI = jsonified_req['image_uri']
+    location = jsonified_req['venue']
     category = jsonified_req['category']
-    details = jsonified_req['details']
+    details = jsonified_req['description']
     telegram_group = jsonified_req["telegram_group"]
 
 
     db = get_db()
     db.execute(
         'INSERT INTO activities (title, date_created, date_activity, ppl, max_ppl, image_uri, venue, category, descrip, creator,telegram_group) VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?, ?,?)',
-        (title, date_activity, people, max_people, imageURI, location, category, details, g.user['username'],telegram_group)
+        (title, date_activity, people, max_people, imageURI, location, category, details, "username",telegram_group)
     )
     db.commit()
     return jsonify({})

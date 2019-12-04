@@ -31,11 +31,11 @@ def register():
             'SELECT username FROM users WHERE username = ?', (username,) # Alike string formatting, ? is replaced with username
         ).fetchone() is not None:                                  # fetchone() returns one row from the query
             error = 'User {} is already registered.'.format(username,)
-
+        print("all fine till here #############################")
         if error is None:
             db.execute( # Database connection executes SQLite command, injecting inputusername and password into user table in schema.sql
-                'INSERT INTO users (username, password, telegram , preference) VALUES (?, ?)',
-                (username, password,telegram, preference)
+                'INSERT INTO users (username, password, telegram , preference) VALUES (?, ?,?,?)',
+                (str(username), str(password),str(telegram), str(preference))
             )
             db.commit()                                 # To commit and save the changes
             return('it works, please redirect to login page')
