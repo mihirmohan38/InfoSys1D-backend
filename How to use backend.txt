@@ -70,7 +70,7 @@ input:
 "image_uri":someImageURL,
 "category":someString,
 "telegram_group" : someString, 
-"descrip" : str , 
+"description" : str , 
 "unq_id" : id, 
 "venue" : id, 
 
