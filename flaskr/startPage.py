@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for 
+    Blueprint, flash, g, redirect, render_template, request, session, url_for , jsonify
 )
 from werkzeug.exceptions import abort  
 #from flaskr.auth import login_required
@@ -81,12 +81,22 @@ def NLP_past(username) :
 
     for id in activity_ids : 
         answer = db.execute(
-            "SELECT * FROM activities WHERE date_activity < ? AND unq_id = ? ",(now,id,)
+            "SELECT * FROM activities WHERE date_activity < ? AND unq_id = ? LIMIT 25",(now,id,)
         ).fetchall()
 
         final.append(answer)
     json = rowList2json_activities(final)
     return json
+
+@bp.route("/registerForEvent/<username>/<int:id>")
+def registerForEvent(username, id) : 
+    db = get_db() 
+    db.execute(
+        "INSERT INTO registered (username, unq_id) VALUES (?,?)",(username,id,)
+    )
+    db.commit() 
+    return jsonify({"status" : 1})#"it works"#jsonify({"staus" : 1})
+
 
 
 @bp.route("/actDescList/future/<username>")
@@ -104,7 +114,7 @@ def NLP_future(username) :
 
     for id in activity_ids : 
         answer = db.execute(
-            "SELECT * FROM activities WHERE date_activity > ? AND unq_id = ? ",(now,id,)
+            "SELECT * FROM activities WHERE date_activity > ? AND unq_id = ? LIMIT 100",(now,id,)
         ).fetchall()
 
         final.append(answer)

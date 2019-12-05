@@ -122,3 +122,26 @@ def rowList2json_activities(lis) :
             act.append(act_dict)
     
     return jsonify(act)
+
+def rowList2json(lis) : 
+    act = [] 
+    for table in lis : 
+        for row in table : 
+            act_dict = {
+                "unq_id" : row[0], 
+                "title" : row[1],
+                "category" : row[2],
+                "date_created" : str(row[3]),
+                "date_activity" : str(row[4]), 
+                "creator" : row[5],
+                "venue" : row[6] , 
+                "ppl" : row[7], 
+                "image_uri" : row[8],
+                "description" : row[9], 
+                "max_ppl" : row[10],
+                "telegram_group" : row[11]
+            }
+            act.append(act_dict)
+    
+    return jsonify(act)
+

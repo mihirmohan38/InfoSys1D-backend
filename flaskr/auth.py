@@ -38,7 +38,7 @@ def register():
                 (str(username), str(password),str(telegram), str(preference))
             )
             db.commit()                                 # To commit and save the changes
-            return('it works, please redirect to login page')
+            return jsonify({"status" : 1})#('it works, please redirect to login page')
             #return redirect(url_for('auth.login'))      # Redirects to login page
 
         flash(error)    # Flashes error, if error exists

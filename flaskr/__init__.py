@@ -4,6 +4,7 @@ from flaskr.db import get_db
 import click
 import json
 
+
 def create_app(test_config = None) : 
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -32,13 +33,14 @@ def create_app(test_config = None) :
         #click.echo(inst)
         return "hello"
 
-    from . import db, startPage, myPage, auth, blog
+    from . import db, startPage, myPage, auth, blog , notification
     
     db.connectApp2db(app)
     app.register_blueprint(startPage.bp)
     app.register_blueprint(myPage.bp)
     app.register_blueprint(blog.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(notification.bp)
     #app.register_blueprint(home.bp)
     #app.add_url_rule("/", endpoint="index")
     return app 
