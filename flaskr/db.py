@@ -84,8 +84,8 @@ def row2json_activities(table) :
 
         activities.append(act_dict)
     
-    if len(activities) == 1 : 
-        return jsonify(act_dict)
+    # if len(activities) == 1 : 
+    #     return jsonify(act_dict)
         
     return jsonify(activities)
 
