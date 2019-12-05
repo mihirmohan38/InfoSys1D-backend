@@ -64,7 +64,7 @@ def login():
 
  # Change to route to android app
 
-@bp.before_app_request # Registers below function that runs before view is called
+#@bp.before_app_request # Registers below function that runs before view is called
 def load_logged_in_user():
     user_id = session.get('username')
     session.permanent = True # User remains logged in 
@@ -77,7 +77,8 @@ def load_logged_in_user():
 
 @bp.route('/logout')
 def logout():
-    session.clear()     # Removes all stored user information from session dictionary
+    return jsonify({"status":1})
+    # session.clear()     # Removes all stored user information from session dictionary
     # Redirected back to login page
 
 def login_required(view):
