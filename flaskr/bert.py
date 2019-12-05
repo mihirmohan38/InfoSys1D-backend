@@ -102,6 +102,7 @@ def prediction(username) :
     final_ids=[]
     for ide in ids_list:
         final_ids.append(int(ide))
+    final_ids = unique(final_ids)
 
 
     return jsonify({"ids_list" : final_ids})
@@ -201,5 +202,12 @@ def get_top10_indexes(matrix):
     lis=matrix.flatten()
     top10=lis.argsort()[-4:][::-1]
     return(top10)
+
+def unique(list1): 
+    # insert the list to the set 
+    list_set = set(list1) 
+    # convert the set to the list 
+    unique_list = (list(list_set)) 
+    return(unique_list)
  
     
