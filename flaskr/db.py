@@ -123,6 +123,18 @@ def rowList2json_activities(lis) :
     
     return jsonify(act)
 
+def bert_data(lis) : 
+    act = [] 
+    for table in lis : 
+        for row in table : 
+            act_dict = {
+                "unq_id" : row[0],
+                "description" : row[9]
+            }
+            act.append(act_dict)
+    
+    return act
+
 def rowList2json(lis) : 
     act = [] 
     for table in lis : 
