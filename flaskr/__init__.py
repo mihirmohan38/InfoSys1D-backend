@@ -42,6 +42,7 @@ def create_app(test_config = None) :
     app.register_blueprint(auth.bp)
     app.register_blueprint(notification.bp)
     app.register_blueprint(bert.bp)
+    print("bert added")
     #app.register_blueprint(home.bp)
     #app.add_url_rule("/", endpoint="index")
     return app 
